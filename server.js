@@ -28,6 +28,28 @@ app.get('/callback', (req, res) => {
     });
 });
 
+// Webhook endpoint for Pipedrive
+app.use(express.json()); // Parse JSON bodies
+
+app.post('/webhook', (req, res) => {
+    console.log('🎣 Webhook received:', req.body);
+    
+    const event = req.body;
+    
+    // Log the deal event
+    if (event && event.current) {
+        console.log(`📋 Deal Event: ${event.event} - Deal ID: ${event.current.id} - Title: ${event.current.title}`);
+    }
+    
+    // Respond to Pipedrive
+    res.json({
+        status: 'OK',
+        message: 'Webhook processed successfully!',
+        received_at: new Date().toISOString(),
+        event_type: event.event || 'unknown'
+    });
+});
+
 // Export for Vercel
 module.exports = app;
 
