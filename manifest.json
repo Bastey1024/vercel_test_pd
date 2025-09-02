@@ -1,0 +1,20 @@
+{
+  "name": "Hello World App",
+  "description": "Simple Hello World Panel App for Pipedrive",
+  "version": "1.0.0",
+  "ui_extensions": [
+    {
+      "type": "panel",
+      "name": "hello-world-panel",
+      "title": "Hello World",
+      "description": "A simple hello world panel",
+      "url": "https://your-app-url.vercel.app/",
+      "context": [
+        {
+          "type": "deal"
+        }
+      ],
+      "settings": []
+    }
+  ]
+}

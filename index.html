@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Pipedrive App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f8f9fa;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #017737;
+            margin-bottom: 20px;
+        }
+        .deal-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 Hello from Pipedrive!</h1>
+        <p>This is your first Pipedrive Panel App!</p>
+        
+        <div class="deal-info">
+            <h3>Deal Information:</h3>
+            <div id="deal-data" class="loading">Loading deal data...</div>
+        </div>
+        
+        <p>✅ Your app is working!</p>
+        <p>📍 You're viewing this from inside Pipedrive</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@pipedrive/app-extensions-sdk@0.5.0/dist/index.js"></script>
+    <script>
+        // Initialize Pipedrive SDK
+        async function initApp() {
+            try {
+                const sdk = await new window.AppExtensionsSDK().initialize();
+                
+                // Show success message
+                document.getElementById('deal-data').innerHTML = `
+                    <p><strong>✅ Connected to Pipedrive!</strong></p>
+                    <p>SDK initialized successfully</p>
+                    <p>Theme: ${sdk.userSettings?.theme || 'default'}</p>
+                `;
+                
+                // Try to get deal context (this will work when in a deal panel)
+                try {
+                    const context = sdk.context;
+                    if (context && context.deal) {
+                        document.getElementById('deal-data').innerHTML += `
+                            <p><strong>Deal ID:</strong> ${context.deal.id}</p>
+                        `;
+                    }
+                } catch (e) {
+                    console.log('No deal context available (that's okay for testing)');
+                }
+                
+            } catch (error) {
+                console.error('Failed to initialize:', error);
+                document.getElementById('deal-data').innerHTML = `
+                    <p style="color: red;">❌ Could not connect to Pipedrive</p>
+                    <p>This might be normal if you're testing outside Pipedrive</p>
+                `;
+            }
+        }
+
+        // Start the app
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
